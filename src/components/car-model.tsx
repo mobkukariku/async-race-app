@@ -4,12 +4,14 @@ import { FC } from "react";
 interface CarModelProps{
     className?:string;
     color?: string;
+    style?: React.CSSProperties;
+    ref?: React.RefObject<HTMLDivElement>;
 
 }
 
-export const CarModel:FC<CarModelProps> = ({className, color})=>{
+export const CarModel:FC<CarModelProps> = ({className, color, style, ref,})=>{
     return(
-        <div className="relative">
+        <div className="relative" style={style} ref={ref} >
             <svg width="157" height="69" viewBox="0 0 157 69" fill={color} xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.592 1.07924C1.09822 3.25548 0.0796606 21.9406 0.0245128 23.9797C-0.0306351 26.0188 0.0245128 34.1752 0.0245128 34.1752H156.25V32.2929C155.936 19.5879 152.276 10.0198 150.289 7.66705C148.25 4.05944 141.244 2.02036 138.212 1.5498C125.036 -0.802991 117.037 0.138123 110.919 0.451829L106.371 2.17721H105.273L48.492 2.33406L46.2961 1.07924H17.592Z" />
                 <path d="M17.592 66.9761C1.09822 64.7999 0.0796606 46.1147 0.0245128 44.0756C-0.0306351 42.0365 0.0245128 33.8802 0.0245128 33.8802H156.25V35.7624C155.936 48.4675 152.276 58.0355 150.289 60.3883C148.25 63.9959 141.244 66.035 138.212 66.5056C125.036 68.8584 117.037 67.9172 110.919 67.6035L106.371 65.8781H105.273L48.492 65.7213L46.2961 66.9761H17.592Z" />

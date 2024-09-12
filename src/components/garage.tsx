@@ -3,14 +3,15 @@ import { useCarStore } from '../store/useCarStore';
 import { TrackLine } from './track-line';
 import { Car, CirclePlus, Play, RefreshCw } from 'lucide-react';
 import { Button } from './button';
-import { CreateModalUI } from './create-modal';
+import { ModalUI } from './modal';
 
 type RaceTrackProps = {
     classname?: string
 }
 
 
-export const RaceTrack: FC<RaceTrackProps> = ({classname,}) =>{
+
+export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
     const [isModalVisible, setIsModalVisible] = useState(false);
 
 
@@ -21,7 +22,7 @@ export const RaceTrack: FC<RaceTrackProps> = ({classname,}) =>{
     
 
 
-    const{cars, getCars,} = useCarStore();
+    const{cars, getCars, moveCar} = useCarStore();
     console.log(cars);
 
     useEffect(()=>{
@@ -29,17 +30,28 @@ export const RaceTrack: FC<RaceTrackProps> = ({classname,}) =>{
 
     }, [getCars]);
 
+    const handleStartRace = async () => {
+        cars.forEach((car) => {
+            moveCar(car.id, 'started');
+        })
+    }
+    const handleStopRace = async () => {
+        cars.forEach((car) => {
+            moveCar(car.id, 'stopped');
+        })
+    }
+
 
     return(
         <main className={`${classname} flex mt-40 flex-col gap-4`}>
             <div className='flex justify-between'>
                 <div className='flex gap-4'>
-                    <Button icon={<Play />} title="Start"  />
-                    <Button icon={<RefreshCw />} title="Reset"  />
+                    <Button icon={<Play />} title="Start" onClick={handleStartRace} />
+                    <Button icon={<RefreshCw />} title="Reset" onClick={handleStopRace} />
                 </div>
                 <div className='flex gap-4'>
                     <Button  icon={<CirclePlus />} title="New Car" onClick={() => openModal()}  />
-                    <CreateModalUI isVisible={isModalVisible} onClose={closeModal} title="Create New Car" />
+                    <ModalUI type="create" isVisible={isModalVisible} onClose={closeModal} title="Create New Car" />
                     <Button icon={<Car />} title="Generate Cars"   />
                 </div>
             </div>

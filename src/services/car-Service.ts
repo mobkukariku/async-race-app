@@ -1,10 +1,19 @@
 
-import { CarProps} from "../types/car";
+import { CarProps } from "../types/car-type";
 import { axiosInstance } from "./axios-Instance";
 
 export const getCars = async () =>{
     try{
         const response =  await axiosInstance.get("/garage");
+        return response.data;
+    }catch(e){
+        console.error(e);
+    }
+}
+
+export const getCar = async (id: number) =>{
+    try{
+        const response = await axiosInstance.get(`/garage/${id}`);
         return response.data;
     }catch(e){
         console.error(e);
@@ -28,3 +37,17 @@ export const createCar = async (car: CarProps) =>{
         console.error(e);
     }
 }
+export const updateCarEngineStatus = async (id: number, status: 'started' | 'stopped' ) => {
+    try {
+        const response = await axiosInstance.patch(`/engine`, null, {
+            params: {
+                id,
+                status
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.error(e);
+    }
+};
+
