@@ -8,3 +8,5 @@ export { TrackLine } from "./track-line";
 export { WinnerRow } from "./winner-row";
 export { Winners } from "./winners"
 export { WinnerModal } from "./winner-modal"
+export { ControlButtons } from "./control-buttons"
+export {GarageControls} from "./garage-controls"

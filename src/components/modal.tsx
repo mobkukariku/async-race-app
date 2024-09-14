@@ -64,4 +64,4 @@ export const ModalUI: FC<ModalProps> = ({ className, title, isVisible, onClose, 
             </div>
         </div>
     );
-};
+}

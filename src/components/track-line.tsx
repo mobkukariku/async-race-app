@@ -1,7 +1,6 @@
 import { FC, useEffect, useState, useRef, useCallback } from "react";
 import { CarProps } from "../interfaces";
-import { SquarePen } from "lucide-react";
-import { CarModel, Button, ModalUI, WinnerModal } from "./";
+import { CarModel, ModalUI, WinnerModal, ControlButtons } from "./";
 import {useCarStore, useWinnerStore} from "../store";
 
 
@@ -16,7 +15,7 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const openModal = () => setIsModalVisible(true);
     const closeModal = () => setIsModalVisible(false);
-    
+
     const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
     const openWinnerModal = () => setIsWinnerModalVisible(true);
     const closeWinnerModal = () => setIsWinnerModalVisible(false);
@@ -25,6 +24,8 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     const { createWinner, winnerSet, getWinner, updateWinner } = useWinnerStore()
     const trackRef = useRef<HTMLDivElement>(null);
     const [positionX, setPositionX] = useState(0);
+
+    const [winnerTime, setWinnerTime] = useState(0);
 
     const scaleDistance = useCallback(() => {
         return trackRef.current ? trackRef.current.offsetWidth + 50 : 0; 
@@ -72,6 +73,7 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
                 } else {
                     createWinner({ id: car.id, wins: 1, time: Number(time.toFixed(2)) });
                 }
+                setWinnerTime(Number(time.toFixed(2)));
                 openWinnerModal(); 
                 
             }, time * 1000);
@@ -87,9 +89,12 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     return (
         <div className={`${className} `} >
             <div className='flex gap-2 items-center'>
-                <Button icon={<SquarePen />} title="Edit" onClick={() => openModal()} />
-                <Button  title="A" onClick={() => moveCar(car.id, 'started')} />
-                <Button  title="B" onClick={resetCarPosition} />
+                <ControlButtons 
+                    car={car}
+                    onOpenModal={openModal}
+                    onReset={resetCarPosition}
+                    onMove={() => moveCar(car.id, 'started')}
+                />
                 <CarModel 
                     color={car.color}
                     className="absolute top-0 left-0 h-10 w-10 transition-transform"
@@ -104,7 +109,7 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
                     {car.name}
                 </div>
             </div>
-            <WinnerModal car={car} time={0} onClose={closeWinnerModal} isVisible={isWinnerModalVisible} />
+            <WinnerModal car={car} time={winnerTime} onClose={closeWinnerModal} isVisible={isWinnerModalVisible} />
             <ModalUI type="update" car={car} isVisible={isModalVisible} onClose={closeModal} title={`Change ${car.name}`} />
         </div>
     );

@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/interfaces/index.tsex.ts"  ]
+, "src/props/index.tsex.ts"  ]
 }
