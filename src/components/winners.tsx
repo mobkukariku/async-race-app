@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useCarStore } from "../store/useCarStore";
 import { useWinnerStore } from "../store/useWinnerStore";
-import { CarModel } from "./car-model";
 import { WinnerRow } from "./winner-row";
 
 

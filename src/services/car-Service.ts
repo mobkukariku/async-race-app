@@ -1,5 +1,5 @@
 
-import { CarProps } from "../types/car-type";
+import { CarProps } from "../interfaces";
 import { axiosInstance } from "./axios-Instance";
 
 export const getCars = async () =>{

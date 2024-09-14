@@ -8,3 +8,10 @@ export interface CarProps{
     status: 'started' | 'stopped';
     
 }
+
+
+export interface WinnerProps{
+    id: number;
+    wins: number;
+    time: number;
+}

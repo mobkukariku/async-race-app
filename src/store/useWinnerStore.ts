@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { WinnerProps } from "../types/winner-type";
+import { WinnerProps } from "../interfaces";
 import { createWinner, getWinner, getWinners, updateWinner } from "../services/winner-Service";
 
 interface WinnerState {
     winners: WinnerProps[],
     winnerSet: boolean,
-    winner: WinnerProps | null,
     getWinners: () => Promise<void>,
     getWinner: (id: number) => Promise<WinnerProps | null>,
     createWinner: (winner: WinnerProps) => Promise<void>,
@@ -16,7 +15,7 @@ interface WinnerState {
 export const useWinnerStore = create<WinnerState>((set) => ({
     winners: [],
     winnerSet: false,
-    winner: null,
+    
 
     getWinners: async () => {
         const winners = await getWinners();
@@ -25,8 +24,7 @@ export const useWinnerStore = create<WinnerState>((set) => ({
 
     getWinner: async (id: number) => {
         const winner = await getWinner(id);
-        set({ winner });
-        return winner; // Возвращаем победителя для дальнейшего использования
+        return winner;
     },
 
     createWinner: async (winner: WinnerProps) => {
@@ -34,7 +32,7 @@ export const useWinnerStore = create<WinnerState>((set) => ({
         set((state) => ({
             ...state,
             winners: [...state.winners, createdWinner],
-            winnerSet: true // Устанавливаем флаг, что победитель создан
+            winnerSet: true 
         }));
     },
 
@@ -43,10 +41,9 @@ export const useWinnerStore = create<WinnerState>((set) => ({
         set((state) => ({
             ...state,
             winners: state.winners.map((w) => (w.id === winner.id ? { ...w, ...updatedWinner } : w)),
-            winnerSet: true // Устанавливаем флаг, что победитель обновлен
+            winnerSet: true 
         }));
     },
 
-    // Метод для сброса флага победителя
     resetWinnerSet: () => set({ winnerSet: false })
 }));

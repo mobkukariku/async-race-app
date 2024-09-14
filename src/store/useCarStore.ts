@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CarProps, } from "../types/car-type";
+import { CarProps } from "../interfaces";
 
 import { createCar as postCar, getCars as fetchCars, updateCar as patchCar, updateCarEngineStatus } from "../services/car-Service";
 

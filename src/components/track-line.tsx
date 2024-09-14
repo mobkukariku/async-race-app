@@ -1,11 +1,9 @@
 import { FC, useEffect, useState, useRef, useCallback } from "react";
-import { CarProps } from "../types/car-type";
-import { CarModel } from "./car-model";
-import { Button } from "./button";
+import { CarProps } from "../interfaces";
 import { SquarePen } from "lucide-react";
-import { ModalUI } from "./modal";
-import { useCarStore } from "../store/useCarStore";
-import { useWinnerStore } from "../store/useWinnerStore";
+import { CarModel, Button, ModalUI, WinnerModal } from "./";
+import {useCarStore, useWinnerStore} from "../store";
+
 
 
 interface TrackLineProps {
@@ -18,6 +16,10 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const openModal = () => setIsModalVisible(true);
     const closeModal = () => setIsModalVisible(false);
+    
+    const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
+    const openWinnerModal = () => setIsWinnerModalVisible(true);
+    const closeWinnerModal = () => setIsWinnerModalVisible(false);
 
     const { moveCar } = useCarStore();
     const { createWinner, winnerSet, getWinner, updateWinner } = useWinnerStore()
@@ -29,8 +31,12 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     }, [trackRef]);
 
     const calculateTime = (distance: number, velocity: number) => {
+        if (velocity <= 0) {
+            return 0;
+        }
         return distance / velocity;
     };
+
 
     const resetCarPosition = () => {
         setPositionX(0);
@@ -40,10 +46,9 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
 
     useEffect(() => {
         registerReset(resetCarPosition);
-    }, [registerReset]);
+    }, [registerReset, resetCarPosition]);
 
 
-    
 
     useEffect(() => {
         if (car.velocity > 0 && !winnerSet) {
@@ -55,21 +60,28 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
             });
     
             const timer = setTimeout(async () => {
+
+                const winnerData = await getWinner(car.id);
                 moveCar(car.id, 'stopped');
     
             
-                const winnerData = await getWinner(car.id);
     
                 if (winnerData) {
-                    updateWinner({ ...winnerData, wins: winnerData.wins + 1 });
+                    updateWinner({ ...winnerData, wins: winnerData.wins + 1, time: Math.min(winnerData.time, Number(time.toFixed(2))) });
+                    
                 } else {
-                    createWinner({ id: car.id, wins: 1, time: time });
+                    createWinner({ id: car.id, wins: 1, time: Number(time.toFixed(2)) });
                 }
+                openWinnerModal(); 
+                
             }, time * 1000);
-    
-            return () => clearTimeout(timer);
+            
+            return () => {
+                clearTimeout(timer);
+                
+            };
         }
-    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner]);
+    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner, isModalVisible]);
     
 
     return (
@@ -92,7 +104,7 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
                     {car.name}
                 </div>
             </div>
-
+            <WinnerModal car={car} time={0} onClose={closeWinnerModal} isVisible={isWinnerModalVisible} />
             <ModalUI type="update" car={car} isVisible={isModalVisible} onClose={closeModal} title={`Change ${car.name}`} />
         </div>
     );

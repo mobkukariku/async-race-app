@@ -1,9 +1,8 @@
 import {FC, useEffect, useRef, useState} from 'react';
-import { useCarStore } from '../store/useCarStore';
+import { useCarStore } from '../store';
 import {  TrackLine } from './track-line';
 import { Car, CirclePlus, Play, RefreshCw } from 'lucide-react';
-import { Button } from './button';
-import { ModalUI } from './modal';
+import { Button, ModalUI } from "./";
 
 type RaceTrackProps = {
     classname?: string

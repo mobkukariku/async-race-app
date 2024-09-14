@@ -1,4 +1,4 @@
-import { WinnerProps } from "../types/winner-type";
+import { WinnerProps } from "../interfaces";
 import { axiosInstance } from "./axios-Instance";
 
 // Получение всех победителей

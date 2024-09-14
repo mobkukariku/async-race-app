@@ -1,7 +1,6 @@
 import { FC } from "react";
-import { WinnerProps } from "../types/winner-type";
-import { CarProps } from "../types/car-type";
-import { CarModel } from "./car-model";
+import { CarProps, WinnerProps } from "../interfaces";
+import { CarModel} from "./";
 
 
 interface WinnerRowProps {
@@ -19,7 +18,7 @@ export const WinnerRow: FC<WinnerRowProps> = ({ winner, car, className }) => {
           <CarModel color={car?.color} />
         </div>
         <div>{winner.wins}</div>
-        <div>{winner.time}</div>
+        <div>{winner.time} s</div>
       </div>
     );
   };

@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { Button } from "./button";
-import { CarProps } from "../types/car-type";
-import { CarModel } from "./car-model";
+import { CarProps } from "../interfaces";
+import { CarModel, Button } from "./";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCarStore } from "../store/useCarStore";
+import { useCarStore } from "../store"
 
 interface ModalProps {
     className?: string;
