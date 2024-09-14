@@ -1,6 +1,6 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 import { useCarStore } from '../store/useCarStore';
-import { TrackLine } from './track-line';
+import {  TrackLine } from './track-line';
 import { Car, CirclePlus, Play, RefreshCw } from 'lucide-react';
 import { Button } from './button';
 import { ModalUI } from './modal';
@@ -19,7 +19,8 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
 
     const closeModal = () => setIsModalVisible(false);
 
-    
+     
+    const resetFunctions: React.MutableRefObject<(() => void)[]> = useRef([]);
 
 
     const{cars, getCars, moveCar} = useCarStore();
@@ -35,11 +36,17 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
             moveCar(car.id, 'started');
         })
     }
-    const handleStopRace = async () => {
-        cars.forEach((car) => {
+    const handleStopRace = () => {
+        cars.forEach((car, index) => {
             moveCar(car.id, 'stopped');
-        })
-    }
+           
+            if (resetFunctions.current[index]) {
+                resetFunctions.current[index]();
+            }
+        });
+    };
+    
+    
 
 
     return(
@@ -58,9 +65,15 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
 
             {/* tracks */}
             <div className='border-y-4 p-3  flex flex-col gap-3 w-full'>
-                {cars.map((car)=>(
+                {cars.map((car, index)=>(
                     
-                    <TrackLine car={car} key={car.id}   />
+                    <TrackLine 
+                        car={car} 
+                        key={car.id}
+                        registerReset={(resetFn) => {
+                            resetFunctions.current[index] = resetFn;
+                        }} 
+                     />
                 ))}
             </div>
         </main>
