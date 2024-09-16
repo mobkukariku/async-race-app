@@ -6,15 +6,17 @@ import { Winners } from './components/winners';
 
 function App() {
   return (
-    <Container classname='app'>
-      <BrowserRouter>
+    <div className='bg-bg'>
+      <Container classname='app'>
+      <BrowserRouter >
         <Header />
-        <Routes>
+        <Routes >
           <Route path="/" element={<Garage />} />
           <Route path="/winners" element={<Winners />} />
         </Routes>
       </BrowserRouter>
     </Container>
+    </div>
   );
 }
 

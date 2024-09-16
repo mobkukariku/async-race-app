@@ -90,7 +90,6 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
         <div className={`${className} `} >
             <div className='flex gap-2 items-center'>
                 <ControlButtons 
-                    car={car}
                     onOpenModal={openModal}
                     onReset={resetCarPosition}
                     onMove={() => moveCar(car.id, 'started')}
@@ -105,8 +104,8 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
                     }}
                 />
 
-                <div className='w-full h-20 bg-slate-400 flex items-center px-20 text-2xl' ref={trackRef}>
-                    {car.name}
+                <div className=' w-full  h-20 bg-slate-400 flex items-center px-10 text-2xl' ref={trackRef}>
+                    <p className="absolute">{car.name}</p>
                 </div>
             </div>
             <WinnerModal car={car} time={winnerTime} onClose={closeWinnerModal} isVisible={isWinnerModalVisible} />

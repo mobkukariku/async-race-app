@@ -1,7 +1,7 @@
 import { WinnerProps } from "../interfaces";
 import { axiosInstance } from "./axios-Instance";
 
-// Получение всех победителей
+
 export const getWinners = async () => {
     try {
         const response = await axiosInstance.get("/winners");
@@ -23,7 +23,6 @@ export const getWinner = async (id: number) => {
     }
 }
 
-// Создание нового победителя
 export const createWinner = async (winner: WinnerProps) => {
     try {
         const response = await axiosInstance.post("/winners", winner);
@@ -34,7 +33,7 @@ export const createWinner = async (winner: WinnerProps) => {
     }
 }
 
-// Обновление победителя
+
 export const updateWinner = async (winner: WinnerProps) => {
     try {
         const response = await axiosInstance.put(`/winners/${winner.id}`, winner);

@@ -2,6 +2,7 @@ import {FC, useEffect, useRef, useState} from 'react';
 import { useCarStore } from '../store';
 import { ModalUI, GarageControls, TrackLine,  } from "./";
 import { Pagination } from './pagination';
+import { usePagination } from '../hooks';
 
 
 type RaceTrackProps = {
@@ -17,9 +18,7 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
 
     const{cars, getCars, moveCar} = useCarStore();
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const carsPerPage = 5;
-
+    const { currentPage, totalPages, currentItems, nextPage, prevPage } = usePagination(cars, 5);
     useEffect(()=>{
         getCars();
 
@@ -43,24 +42,7 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
         });
     };
     
-    const indexOfLastCar = currentPage * carsPerPage;
-    const indexOfFirstCar = indexOfLastCar - carsPerPage;
-    const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
-
-    const totalPages = Math.ceil(cars.length / carsPerPage);
     
-    const nextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(prev => prev + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(prev => prev - 1);
-        }
-    };
-
    
 
     return(
@@ -72,8 +54,8 @@ export const Garage: FC<RaceTrackProps> = ({classname,}) =>{
             />
 
 
-            <div className="border-y-4 p-3 flex flex-col gap-3 w-full">
-                {currentCars.map((car, index) => (
+            <div className="border-y-4 border-component-color p-3 flex flex-col gap-3 w-full">
+                {currentItems.map((car, index) => (
                     <TrackLine 
                         car={car}
                         key={car.id}
