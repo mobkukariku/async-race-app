@@ -99,7 +99,7 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
 
             return () => clearTimeout(timer);
         }
-    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner]);
+    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner, car]);
     
 
     return (

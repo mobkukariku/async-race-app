@@ -30,9 +30,8 @@ export function useGenerateCars() {
         return names[Math.floor(Math.random() * names.length)];
     }, []);
 
-    const generateCars = useCallback((count: number) => {
-        
-        for (let i = cars.length; i < count; i++) {
+    const generateCars = useCallback(async () => {
+        for (let i = cars.length; i < 101; i++) {
             const car: CarProps = {
                 id: i,
                 name: randomlyName(),
@@ -42,7 +41,12 @@ export function useGenerateCars() {
                 status: 'stopped',
                 wins: undefined
             };
-            createCar(car);
+
+            try {
+                await createCar(car);
+            } catch (error) {
+                console.error(`Failed to create car with id ${car.id}:`, error);
+            }
         }
     }, [cars.length, createCar, randomlyName, randomColor]);
 

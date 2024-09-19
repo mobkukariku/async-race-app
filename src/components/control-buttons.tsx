@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { SquarePen } from "lucide-react";
+import { OctagonX, SquarePen } from "lucide-react";
 import { Button } from "./";
 
 interface ControlButtonsProps {
@@ -13,7 +13,7 @@ export const ControlButtons: FC<ControlButtonsProps> = ({ onOpenModal, onReset, 
   <div className="flex  gap-2">
     <div className="flex flex-col gap-2">
       <Button icon={<SquarePen />} title="Edit" onClick={onOpenModal} />
-      <Button title="Delete" onClick={onDelete} />
+      <Button icon={<OctagonX />} title="Delete" onClick={onDelete} />
     </div>
     <div className="flex flex-col gap-2">
       <Button title="A" onClick={onMove} />

@@ -33,7 +33,7 @@ export const useCarStore = create<CarState>((set) => ({
     createCar: async (car: CarProps) => {
         const createdCar = await postCar(car);
         set((state) => ({
-            cars: [...state.cars, createdCar]
+            cars: [...state.cars, createdCar] 
         }));
     },
     deleteCar: async (id: number) => {
