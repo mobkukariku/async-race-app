@@ -1,4 +1,5 @@
 
+import { AxiosError } from "axios";
 import { CarProps } from "../interfaces";
 import { axiosInstance } from "./axios-Instance";
 
@@ -51,3 +52,38 @@ export const updateCarEngineStatus = async (id: number, status: 'started' | 'sto
     }
 };
 
+export const updateCarDriveStatus = async (id: number) => {
+    try {
+        const response = await axiosInstance.patch(`/engine`, null, {
+            params: {
+                id,
+                status: 'drive'
+            }
+        });
+        return response.data;
+    } catch (e) {
+        if(e instanceof AxiosError) {
+            if (e.response) {
+                const statusCode = e.response.status;
+                if (statusCode === 500) {
+                    console.error("Car engine broke down.");
+                } else if (statusCode === 429) {
+                    console.error("Drive already in progress.");
+                }
+            } else {
+                console.error(e);
+            }
+        throw e; 
+        }   
+    }
+};
+
+
+export const deleteCar = async (id: number) =>{
+    try{
+        const response =  await axiosInstance.delete(`/garage/${id}`);
+        return response.data;
+    }catch(e){
+        console.error(e);
+    }
+}

@@ -20,8 +20,8 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
     const openWinnerModal = () => setIsWinnerModalVisible(true);
     const closeWinnerModal = () => setIsWinnerModalVisible(false);
 
-    const { moveCar } = useCarStore();
-    const { createWinner, winnerSet, getWinner, updateWinner } = useWinnerStore()
+    const { moveCar, deleteCar } = useCarStore();
+    const { createWinner, winnerSet, getWinner, updateWinner, deleteWinner, resetWinnerSet } = useWinnerStore()
     const trackRef = useRef<HTMLDivElement>(null);
     const [positionX, setPositionX] = useState(0);
 
@@ -38,12 +38,18 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
         return distance / velocity;
     };
 
+    const handleDeleteCar = () => {
+        deleteCar(car.id);
+        deleteWinner(car.id);
+    };
 
-    const resetCarPosition = () => {
+
+    const resetCarPosition = useCallback(() => {
         setPositionX(0);
         car.velocity=0;
         moveCar(car.id, 'stopped'); 
-    };
+        resetWinnerSet();
+    }, [car, moveCar, resetWinnerSet]);
 
     useEffect(() => {
         registerReset(resetCarPosition);
@@ -52,38 +58,48 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
 
 
     useEffect(() => {
+        console.log(car);
         if (car.velocity > 0 && !winnerSet) {
             const scaledDistance = scaleDistance();
             const time = calculateTime(scaledDistance, car.velocity);
-    
+
+
             requestAnimationFrame(() => {
                 setPositionX(scaledDistance);
             });
-    
-            const timer = setTimeout(async () => {
 
-                const winnerData = await getWinner(car.id);
-                moveCar(car.id, 'stopped');
-    
-            
-    
-                if (winnerData) {
-                    updateWinner({ ...winnerData, wins: winnerData.wins + 1, time: Math.min(winnerData.time, Number(time.toFixed(2))) });
-                    
-                } else {
-                    createWinner({ id: car.id, wins: 1, time: Number(time.toFixed(2)) });
+            const timer = setTimeout(async () => {
+                try {
+                    const winnerData = await getWinner(car.id);
+                    moveCar(car.id, 'stopped');
+
+                    if (winnerData) {
+                        updateWinner({
+                            ...winnerData,
+                            wins: winnerData.wins + 1,
+                            time: Math.min(winnerData.time, time)
+                        });
+                    } else {
+                        createWinner({ 
+                            id: car.id, 
+                            wins: 1, 
+                            time: Number(time.toFixed(2)) 
+                        });
+                    }
+
+                    setWinnerTime(Number(time.toFixed(2))); 
+                    openWinnerModal();
+
+                } catch (error) {
+                    console.error('Error during race: ', error);
+
+                    moveCar(car.id, 'stopped');
                 }
-                setWinnerTime(Number(time.toFixed(2)));
-                openWinnerModal(); 
-                
             }, time * 1000);
-            
-            return () => {
-                clearTimeout(timer);
-                
-            };
+
+            return () => clearTimeout(timer);
         }
-    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner, isModalVisible]);
+    }, [car.velocity, car.id, moveCar, scaleDistance, createWinner, winnerSet, getWinner, updateWinner]);
     
 
     return (
@@ -93,6 +109,8 @@ export const TrackLine: FC<TrackLineProps> = ({ className, car, registerReset}) 
                     onOpenModal={openModal}
                     onReset={resetCarPosition}
                     onMove={() => moveCar(car.id, 'started')}
+                    onDelete={handleDeleteCar}
+                    
                 />
                 <CarModel 
                     color={car.color}

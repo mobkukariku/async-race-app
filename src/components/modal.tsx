@@ -35,7 +35,7 @@ export const ModalUI: FC<ModalProps> = ({ className, title, isVisible, onClose, 
     };
 
     return (
-        <div className={`${className} bg-black/40 fixed flex justify-center items-center inset-0 z-30 transition-opacity duration-300 ease-out ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`${className} bg-black/40 fixed flex justify-center items-center inset-0 z-50 transition-opacity duration-300 ease-out ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <div className={`bg-slate-300 p-5 w-1/5 rounded-lg transform transition-transform duration-300 ease-out ${isVisible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
                 <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
                     <h1 className="font-bold text-2xl text-center">{title}</h1>

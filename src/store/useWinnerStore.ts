@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { WinnerProps } from "../interfaces";
-import { createWinner, getWinner, getWinners, updateWinner } from "../services/winner-Service";
+import { createWinner, deleteWinner, getWinner, getWinners, updateWinner } from "../services/winner-Service";
 
 interface WinnerState {
     winners: WinnerProps[],
@@ -9,6 +9,7 @@ interface WinnerState {
     getWinner: (id: number) => Promise<WinnerProps | null>,
     createWinner: (winner: WinnerProps) => Promise<void>,
     updateWinner: (winner: WinnerProps) => Promise<void>,
+    deleteWinner: (id: number) => Promise<void>,
     resetWinnerSet: () => void
 }
 
@@ -32,6 +33,15 @@ export const useWinnerStore = create<WinnerState>((set) => ({
         set((state) => ({
             ...state,
             winners: [...state.winners, createdWinner],
+            winnerSet: true 
+        }));
+    },
+
+    deleteWinner: async (id: number) => {
+        await deleteWinner(id);
+        set((state) => ({
+            ...state,
+            winners: state.winners.filter((w) => w.id !== id),
             winnerSet: true 
         }));
     },

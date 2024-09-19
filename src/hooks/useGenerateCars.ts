@@ -31,6 +31,7 @@ export function useGenerateCars() {
     }, []);
 
     const generateCars = useCallback((count: number) => {
+        
         for (let i = cars.length; i < count; i++) {
             const car: CarProps = {
                 id: i,
