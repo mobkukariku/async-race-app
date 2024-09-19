@@ -43,3 +43,13 @@ export const updateWinner = async (winner: WinnerProps) => {
         return null; 
     }
 }
+
+export const deleteWinner = async (id: number) => {
+    try {
+        const response = await axiosInstance.delete(`/winners/${id}`);
+        return response.data;
+    } catch (e) {
+        console.error(`Error deleting winner with id ${id}:`, e);
+        return null; 
+    }
+}
