@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Play, RefreshCw, CirclePlus, Car, OctagonX } from 'lucide-react';
 import { Button } from './';
-import { useGenerateCars } from '../hooks';
+
 
 
 
