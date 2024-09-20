@@ -5,7 +5,7 @@ export interface CarProps{
     color: string;
     distance: number;  
     velocity: number;  
-    status: 'started' | 'stopped';
+    status: 'started' | 'stopped' ;
     
 }
 

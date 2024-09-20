@@ -11,7 +11,7 @@ interface CarState {
     createCar: (car: CarProps) => Promise<void>;
     deleteCar: (id: number) => Promise<void>;
     moveCar: (id: number, status: 'started' | 'stopped') => Promise<void>;
-    resetCar: (id: number) => void
+    resetCar: (id: number) => void;
 }
 
 export const useCarStore = create<CarState>((set) => ({
