@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://async-race-server-production-bf9e.up.railway.app",
     headers: {
         "Content-Type": "application/json",
     },
